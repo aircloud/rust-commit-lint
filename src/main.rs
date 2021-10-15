@@ -1,53 +1,51 @@
-#![feature(extended_key_value_attributes)]
-#![feature(osstring_ascii)]
+mod test;
 
 #[macro_use]
 extern crate clap;
 use clap::App;
 
 use std::fs;
-
+use regex::Regex;
 use serde_derive::Deserialize;
 
 #[derive(Deserialize, Debug)]
-struct Config {
+pub(crate) struct LintConfig {
     commit_types: Vec<String>,
     commit_scopes: Vec<String>,
 }
 
-// argv 解析
-// toml 解析
-use std::env;
-
-pub fn main() {
-        // The YAML file is found relative to the current file, similar to how modules are found
-        let yaml = load_yaml!("cli.yml");
-        let matches = App::from_yaml(yaml).get_matches();
-    
-        // Same as previous examples...
-
-
-    println!("opt.message: {:?}", matches.value_of("message"));
-    println!("opt.config_path: {:?}", matches.value_of("config_path"));
-
-    let contents = fs::read_to_string(matches.value_of("config_path").unwrap())
+pub(crate) fn get_lint_config(config_path: &str) -> LintConfig {
+    let contents = fs::read_to_string(config_path)
         .expect("Something went wrong reading the file");
     
-    let config: Config = toml::from_str(contents.as_str()).unwrap();
-    println!("config: {:?}", config);
+    let config: LintConfig = toml::from_str(contents.as_str()).unwrap();
 
-    use regex::Regex;
+    return config;
+}
 
-    let reg_source = format!(r"^({})\(({}),?*\):.{{4,}}?$", config.commit_types.join("|"), config.commit_scopes.join("|"));
-    println!("reg_source: {}", reg_source);
-    let re = Regex::new(reg_source.as_str()).unwrap();
+/// 根据配置路径和信息测试是否通过
+pub fn judge_message_lint_pass(config_path: &str, message: &str) -> bool {
+    let lint_config = get_lint_config(config_path);
 
-    println!("re: {}", re);
+    let reg_source = format!(r"^({})\((({}),?)*\):.{{4,}}?$", lint_config.commit_types.join("|"), lint_config.commit_scopes.join("|"));
+    let commit_regex = Regex::new(reg_source.as_str()).unwrap();
 
-    println!("1: {}", re.is_match("feat(all,common):1"));
-    println!("2: {}", re.is_match("feat(all):123"));
-    println!("3: {}", re.is_match("chore(common):12345"));
-    println!("4: {}", re.is_match("choreommon):123"));
+    println!("commit_regex: {:?}", commit_regex);
+    return commit_regex.is_match(message);
+}
 
-    // more program logic goes here...
+pub fn main() {
+    // The YAML file is found relative to the current file, similar to how modules are found
+    let yaml = load_yaml!("cli.yml");
+    let matches = App::from_yaml(yaml).get_matches();
+
+    let pass = judge_message_lint_pass(matches.value_of("config_path").unwrap(), matches.value_of("message").unwrap());
+
+    if !pass {
+        eprintln!("commit-lint error: 提交信息不规范，请重新检查( TYPE 和 SCOPE 请参考 .toml 配置文件)");
+        println!("提交规范: TYPE(SCOPE): MESSAGE");
+        std::process::exit(-1);
+    }
+
+    println!("commit-lint pass");
 }

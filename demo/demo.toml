@@ -1,6 +1,6 @@
-
-# feat(client): 
-# fix(client, jupyter):
+# example:
+# feat(client): add xxx feature
+# fix(client, jupyter): fix xxx bug
 
 commit_scopes = [
   'common',

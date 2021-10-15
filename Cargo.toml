@@ -1,5 +1,5 @@
 [package]
-name = "rust-commit-lint"
+name = "commit-lint"
 version = "0.1.0"
 authors = ["niexiaotao <niexiaotao@high-flyer.cn>"]
 edition = "2018"
