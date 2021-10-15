@@ -9,7 +9,7 @@
 commit lint git hook
 
 USAGE:
-    rust-commit-lint --config_path <config_path> --message <MESSAGE>
+    commit-lint --config_path <config_path> --message <MESSAGE>
 
 FLAGS:
     -h, --help       Prints help information
