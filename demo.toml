@@ -1,0 +1,22 @@
+
+# feat(client): 
+# fix(client, jupyter):
+
+commit_scopes = [
+  'common',
+  'all',
+  'client',
+  'jupyter'
+]
+commit_types = [
+  'feat',  # 需求
+  'fix', # 修复
+  'chore', # 杂项
+  'ci', # ci
+  'docs', # 文档
+  'perf', # 性能改进
+  'refactor', # 架构改进
+  'revert', # 回滚
+  'style', # 代码风格
+  'test' # 测试
+]

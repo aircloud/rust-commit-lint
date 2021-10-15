@@ -1,0 +1,18 @@
+name: rust-commit-line
+version: "1.0"
+author: xt.nie
+about: commit lint git hook
+args:
+    - message:
+        short: m
+        long: message
+        value_name: MESSAGE
+        help: commit message
+        takes_value: true
+        required: true
+    - config_path:
+        short: c
+        long: config_path
+        help: the lint config path
+        required: true
+        takes_value: true
