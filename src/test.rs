@@ -9,6 +9,7 @@ mod tests {
     assert!(!judge_message_lint_pass("demo/demo.toml", "notype(scope):not scope"));
     assert!(!judge_message_lint_pass("demo/demo.toml", "feat(client):fix"));
     assert!(!judge_message_lint_pass("demo/demo.toml", "feat(client):中文"));
+    assert!(!judge_message_lint_pass("demo/demo.toml", "修复一个问题"));
   }
 
   #[test]
@@ -19,5 +20,8 @@ mod tests {
     assert!(judge_message_lint_pass("demo/demo.toml", "chore(common): 中文测试"));
     assert!(judge_message_lint_pass("demo/demo.toml", "chore(common,jupyter): 中文测试"));
     assert!(judge_message_lint_pass("demo/demo.toml", "fix(all,common,jupyter): 中文测试"));
+    assert!(judge_message_lint_pass("demo/demo.toml", "fix(all,common,jupyter): 中文测试\n翻页"));
+    assert!(judge_message_lint_pass("demo/demo.toml", "fix(all,common,jupyter): 中文测试
+       直接换行"));
   }
 }

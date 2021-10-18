@@ -27,10 +27,10 @@ pub(crate) fn get_lint_config(config_path: &str) -> LintConfig {
 pub fn judge_message_lint_pass(config_path: &str, message: &str) -> bool {
     let lint_config = get_lint_config(config_path);
 
-    let reg_source = format!(r"^({})\((({}),?)*\):.{{4,}}?$", lint_config.commit_types.join("|"), lint_config.commit_scopes.join("|"));
+    let reg_source = format!(r"^({})\((({}),?)*\):.{{4,}}?", lint_config.commit_types.join("|"), lint_config.commit_scopes.join("|"));
     let commit_regex = Regex::new(reg_source.as_str()).unwrap();
 
-    println!("commit_regex: {:?}", commit_regex);
+    // println!("commit_regex: {:?}", commit_regex);
     return commit_regex.is_match(message);
 }
 
