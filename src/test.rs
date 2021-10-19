@@ -23,5 +23,6 @@ mod tests {
     assert!(judge_message_lint_pass("demo/demo.toml", "fix(all,common,jupyter): 中文测试\n翻页"));
     assert!(judge_message_lint_pass("demo/demo.toml", "fix(all,common,jupyter): 中文测试
        直接换行"));
+    assert!(judge_message_lint_pass("demo/demo.toml", "Merge branch 'wentao-dev'"));
   }
 }

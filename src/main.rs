@@ -25,6 +25,14 @@ pub(crate) fn get_lint_config(config_path: &str) -> LintConfig {
 
 /// 根据配置路径和信息测试是否通过
 pub fn judge_message_lint_pass(config_path: &str, message: &str) -> bool {
+
+    let skip_regex = Regex::new(r"^Merge branch").unwrap();
+
+    if skip_regex.is_match(message) {
+        println!("skip this messge check");
+        return true;
+    }
+
     let lint_config = get_lint_config(config_path);
 
     let reg_source = format!(r"^({})\((({}),?)*\):.{{4,}}?", lint_config.commit_types.join("|"), lint_config.commit_scopes.join("|"));
